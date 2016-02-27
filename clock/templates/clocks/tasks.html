@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block content %}
+  <div class="section" style="background-color: #AAA;">
+    <div class="container">
+      <div class="row">
+        <h2>Tasks:</h2>
+      </div>
+    </div>
+  </div>
+
+{% if tasks %}
+{% for task in tasks %}
+  <div class="section" style="background-color: #777;">
+    <div class="container">
+      <div class="row">
+        <form id="form{{ task.task_id }}">
+          <div class="col-xs-2 getlow text-center">
+            <a href="javascript: click_clock({{ task.task_id }})" id="clock_butt{{ task.task_id }}" class="btn btn-block btn-lg btn-success text-xs-center">
+              <i class="fa fa-clock-o fa-fw"></i>
+              Clock-in
+            </a>
+          </div>
+        </form>
+        <div class="col-xs-8">
+          <ul class="list-group" draggable="true">
+            <li class="list-group-item">
+              {{ task.name }}
+            </li>
+            <li class="list-group-item" id="time{{ task.task_id }}">
+              00:00:00
+            </li>
+            <li class="list-group-item">
+              <b id="tot_H{{ task.task_id }}">{% widthratio task.seconds 3600 1 %}</b> H <b id="tot_M{{ task.task_id }}">{% widthratio task.seconds 60 1 %}</b> M Total
+            </li>
+          </ul>
+        </div>
+        <div class="col-xs-2 getlow text-center">
+          <a href="" class="btn btn-block btn-lg btn-danger text-xs-center">
+            Edit
+          </a>
+        </div>
+      </div>
+      <div class="row">&nbsp</div>
+    </div>
+  </div>
+{% endfor %}
+{% else %}
+  <div class="section" style="background-color: #777;">
+    <div class="container">
+      <div class="row"></div>
+      <div class="row">
+        <h3>You currently have no tasks.</h3>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+
+
+  <div class="section" id="add_buttons_section">
+    <div class="container">
+
+      <div class="row plusrow">
+        <div class="col-lg-6 col-lg-offset-3 text-xs-center">
+          <a href="javascript: show_add_task()" class="btn btn-block btn-sm btn-success text-xs-center">
+            <i class="fa fa-plus fa-fw"></i>
+            Add Task
+          </a>
+        </div>
+      </div>
+
+      <div class="row plusrow">
+        <div class="col-lg-6 col-lg-offset-3 text-xs-center">
+          <a href="javascript: show_add_project()" class="btn btn-block btn-sm btn-success text-xs-center">
+            <i class="fa fa-plus fa-fw"></i>
+            Add Project
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+{% if mobile %}
+<div class="col-md-12">
+{% else %}
+<div class="col-md-8 col-md-offset-2">
+{% endif %}
+<div id="nameFormContainer" style="display:none;">
+<div class="panel panel-default" >
+<div class="panel-body">
+  <div class="col-xs-12">
+    <h4 style="margin-bottom: 20px;">Please enter your first name and last name:</h4>
+  </div>
+  <form id="nameForm" class="form-horizontal" action="." method="post" role="form">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+    <div class="form-group">
+      {{ form.non_field_errors }}
+    </div>
+    {% endif %}
+    <div class="form-group">
+      <div class="col-xs-12">
+        <input type="text" class="form-control" name="first_name" id="id_first_name" placeholder="First Name" maxlength="30" autofocus/>
+      </div>
+    </div>
+    {% if form.first_name.errors %}
+    <div class="form-group">
+      {{ form.first_name.errors }}
+    </div>
+    {% endif %}
+    <div class="form-group">
+      <div class="col-xs-12">
+        <input type="text" class="form-control" name="last_name" id="id_last_name" placeholder="Last Name" maxlength="30" autofocus/>
+      </div>
+    </div>
+    {% if form.last_name.errors %}
+    <div class="form-group">
+      {{ form.last_name.errors }}
+    </div>
+    {% endif %}
+    <div class="form-group">
+      <div class="col-xs-6">
+        <button type="submit" class="btn btn-success btn-block" name="name-submit" id="name-submit" value="Register">Update</button>
+      </div>
+      <div class="col-xs-6">
+        <button type="button" class="btn btn-block" name="name-submit" id="name-cancel" value="Cancel" onclick="hide_name_input();">Cancel</button>
+      </div>
+    </div>
+  </form>
+</div><!-- End panel body -->
+</div><!-- End panel group -->
+</div><!-- End nameFormContainer div -->
+</div>
+
+
+  <div id="placeholders" style="display: none;">
+    <ul>
+      <li id="time0"></li>
+    </ul>
+  </div>
+
+{% endblock %}
+
+{% block footer_js %}
+<script type="text/javascript" src="{% static 'js/clocks.js' %}"></script>
+{% endblock %}
+
+
+
+
+

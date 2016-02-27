@@ -1,0 +1,23 @@
+Welcome to {{ site.name }}. 
+
+Congratulations, you have signed up for a Premium Account.
+This means You will not be limited to one project and five tasks...
+You can have as many as you want!
+
+Premium Accounts are currently free of charge.
+However, if you do wish to contribute so that we can continue to make amazing things,
+Please donate bitcoin:
+bitcoin:1MPfsgewyBg3Qum8Msc8uQn7kPXpf3FzgV?amount=0.01&label=ClockIn
+
+Click the following link to activate your Premium Account:
+http://{{site.domain}}{% url 'registration_activate' activation_key %}
+
+
+This activation link will only be valid for {{ expiration_days }} days.
+
+Sincerely,
+{{ site.name }} Management
+
+If you did not recently sign up for an account with {{ site.name }},
+please ignore this email and your address will be removed from our records.
+
