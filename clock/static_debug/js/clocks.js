@@ -6,6 +6,7 @@ var start_time = 0;
 var elapsed_time = 0;
 var time_by_id = document.getElementById("time0");
 var current_task = 0;
+var color_str = '000000';
 
 
 /* #### ajax POST ########################################################## */
@@ -18,6 +19,8 @@ function ajax_post(url, post_data) {
     dataType: "html"
   }).done(function() {
     retval = true;
+  }).fail(function(msg) {
+    alert(msg)
   });
   return retval;
 }
@@ -42,6 +45,9 @@ function time_string(h, m, s) {
 /* #### Clock in/out ####################################################### */
 function click_clock(task_id) {
   if (!click_clocking) {
+    
+    //TODO: disable the button...
+
     click_clocking = true;
     if (!clocked_in) {
       time_by_id = document.getElementById("time" + task_id);
@@ -68,7 +74,8 @@ function clock_in(task_id) {
 function clock_out(task_id) {
   clearInterval(timer_interval);
   var s = Math.floor(elapsed_time / 1000);
-  if (ajax_post("clocks/clock_out", {id : task_id, seconds : s})) {
+  var csrf = $('[name="csrfmiddlewaretoken"]').value;
+  if (ajax_post("clocks/clockout", {id : task_id, seconds : s, csrfmiddlewaretoken : csrf})) {
     time_by_id.innerHTML = time_string(0,0,0);
     clocked_in = false;
     current_task = 0;
@@ -79,7 +86,6 @@ function clock_out(task_id) {
     $('#clock_butt' + task_id).removeClass('btn-success');
     $('#clock_butt' + task_id).removeClass('btn-warning');
     $('#clock_butt' + task_id).addClass('btn-danger');
-    alert("Clock failed :/");
   }    
 }
 
@@ -96,16 +102,31 @@ function update_timer() {
 }
 
 /* #### Add Task ########################################################### */
-function show_add_task() {
-alert("add task!");
+function show_add_task(project) {
+  document.getElementById("task_modal").style.display="block";
+  document.getElementById("add_buttons_section").style.display="none";
+  document.getElementById("id_project").value=project;
 }
 
 function hide_add_task() {
-
+  document.getElementById("id_name").value="";
+  task_color(0);
+  document.getElementById("task_modal").style.display="none";
+  document.getElementById("add_buttons_section").style.display="block";
 }
 
 function submit_add_task() {
+  document.getElementById("id_color").value=color_str;
+  document.getElementById("task_form").submit();
+}
 
+function task_color(t) {
+  colors = ['333333', '555555', '777777', '999999', 'BBBBBB'];
+  color_str = colors[t];
+  for(j=0;j<5;j++) {
+    t==j?document.getElementById("tb"+j).setAttribute("disabled","disabled")
+    :document.getElementById("tb"+j).removeAttribute("disabled");
+  }
 }
 
 /* #### Edit Task ########################################################## */

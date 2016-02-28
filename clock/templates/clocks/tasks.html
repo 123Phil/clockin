@@ -64,83 +64,102 @@
 
       <div class="row plusrow">
         <div class="col-lg-6 col-lg-offset-3 text-xs-center">
-          <a href="javascript: show_add_task()" class="btn btn-block btn-sm btn-success text-xs-center">
-            <i class="fa fa-plus fa-fw"></i>
-            Add Task
-          </a>
+          <button type="button" class="btn {% if mobile %} btn-md {% else %} btn-lg {% endif %} btn-block btn-success" value="Add Task" onclick="show_add_task(-1);">
+            <span class="glyphicon glyphicon-plus"></span> Add Task
+          </button>
         </div>
       </div>
 
       <div class="row plusrow">
         <div class="col-lg-6 col-lg-offset-3 text-xs-center">
-          <a href="javascript: show_add_project()" class="btn btn-block btn-sm btn-success text-xs-center">
-            <i class="fa fa-plus fa-fw"></i>
-            Add Project
-          </a>
+          <button type="button" class="btn {% if mobile %} btn-md {% else %} btn-lg {% endif %} btn-block btn-success" value="Add Project"  onclick="show_add_project();">
+            <span class="glyphicon glyphicon-plus"></span> Add Project
+          </button>
         </div>
       </div>
 
     </div>
   </div>
 
+<!-- Add task modal -->
+<div class="section" id="task_modal" {% if not bad_t_form %}style="display:none;"{% endif %}>
+<div class="container">
 {% if mobile %}
-<div class="col-md-12">
+<div class="container col-md-12">
 {% else %}
-<div class="col-md-8 col-md-offset-2">
+<div class="container col-md-8 col-md-offset-2">
 {% endif %}
-<div id="nameFormContainer" style="display:none;">
+<div class="panel-group">
 <div class="panel panel-default" >
 <div class="panel-body">
-  <div class="col-xs-12">
-    <h4 style="margin-bottom: 20px;">Please enter your first name and last name:</h4>
-  </div>
-  <form id="nameForm" class="form-horizontal" action="." method="post" role="form">
+
+  <form id="task_form" class="form-horizontal" action="{% url 'clocks:new_task' %}" method="post" role="form">
     {% csrf_token %}
-    {% if form.non_field_errors %}
+    {% if task_form.non_field_errors %}
     <div class="form-group">
-      {{ form.non_field_errors }}
+      {{ task_form.non_field_errors }}
     </div>
     {% endif %}
     <div class="form-group">
       <div class="col-xs-12">
-        <input type="text" class="form-control" name="first_name" id="id_first_name" placeholder="First Name" maxlength="30" autofocus/>
+        <h3 style="margin-bottom: 20px;">New Task:</h3>
+      </div>
+      <div class="col-xs-12">
+        <input type="text" class="form-control" name="name" id="id_name" placeholder="Task Name" maxlength="50" autofocus/>
       </div>
     </div>
-    {% if form.first_name.errors %}
+    {% if task_form.name.errors %}
     <div class="form-group">
-      {{ form.first_name.errors }}
+      {{ task_form.name.errors }}
     </div>
     {% endif %}
+
     <div class="form-group">
       <div class="col-xs-12">
-        <input type="text" class="form-control" name="last_name" id="id_last_name" placeholder="Last Name" maxlength="30" autofocus/>
+        <h5>Select a task color:</h5>
+      </div>
+      <div class="col-xs-12">
+        <div class="col-xs-offset-4">
+          <button type="button" id="tb0" class="btn btn-md btn-color center-block col-xs-1" style="background-color: #333;" onclick="task_color(0);" disabled="disabled">&nbsp</button>
+          <button type="button" id="tb1" class="btn btn-md btn-color center-block col-xs-1" style="background-color: #555;" onclick="task_color(1);">&nbsp</button>
+          <button type="button" id="tb2" class="btn btn-md btn-color center-block col-xs-1" style="background-color: #777;" onclick="task_color(2);">&nbsp</button>
+          <button type="button" id="tb3" class="btn btn-md btn-color center-block col-xs-1" style="background-color: #999;" onclick="task_color(3);">&nbsp</button>
+          <button type="button" id="tb4" class="btn btn-md btn-color center-block col-xs-1" style="background-color: #bbb;" onclick="task_color(4);">&nbsp</button>
+        </div>
       </div>
     </div>
-    {% if form.last_name.errors %}
+
     <div class="form-group">
-      {{ form.last_name.errors }}
     </div>
-    {% endif %}
+    <div class="form-group" style="display: none;">
+        <input type="text" class="form-control" name="color" id="id_color" maxlength="6" hidden/>
+    </div>
+    <div class="form-group" style="display: none;">
+        <input type="text" class="form-control" name="project" id="id_project" maxlength="50" hidden/>
+    </div>
+
     <div class="form-group">
       <div class="col-xs-6">
-        <button type="submit" class="btn btn-success btn-block" name="name-submit" id="name-submit" value="Register">Update</button>
+        <button type="button" class="btn btn-success btn-block" name="name-submit" id="name-submit" value="Create Task" onclick="submit_add_task();">Create Task</button>
       </div>
       <div class="col-xs-6">
-        <button type="button" class="btn btn-block" name="name-submit" id="name-cancel" value="Cancel" onclick="hide_name_input();">Cancel</button>
+        <button type="button" class="btn btn-block btn-danger" name="name-cancel" id="name-cancel" value="Cancel" onclick="hide_add_task();">Cancel</button>
       </div>
     </div>
   </form>
-</div><!-- End panel body -->
-</div><!-- End panel group -->
-</div><!-- End nameFormContainer div -->
+
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 
-
-  <div id="placeholders" style="display: none;">
-    <ul>
-      <li id="time0"></li>
-    </ul>
-  </div>
+<div id="placeholders" style="display: none;">
+  <ul>
+    <li id="time0">{{ seconds }}</li>
+  </ul>
+</div>
 
 {% endblock %}
 

@@ -11,5 +11,5 @@ urlpatterns = [
 	url(r'^admin/', include(admin.site.urls)),
 	url(r'^accounts/', include('registration.backends.simple.urls')),
 	url(r'^account$', include(account_urls, namespace="account")),
-	url(r'^/', include(clocks_urls, namespace="clocks")),
+	url(r'^clocks/', include(clocks_urls, namespace="clocks")),
 ]
