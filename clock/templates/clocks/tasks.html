@@ -2,87 +2,99 @@
 {% load static from staticfiles %}
 
 {% block content %}
-  <div class="section" style="background-color: #AAA;">
+  <div class="section" style="background-color: #555;">
     <div class="container">
       <div class="row">
-        <h2>Tasks:</h2>
+        <h2>{{ user.username }}'s tasks:</h2>
       </div>
     </div>
   </div>
 
 {% if tasks %}
 {% for task in tasks %}
-  <div class="section" style="background-color: #777;">
-    <div class="container">
-      <div class="row">
-        <form id="form{{ task.task_id }}">
-          <div class="col-xs-2 getlow text-center">
-            <a href="javascript: click_clock({{ task.task_id }})" id="clock_butt{{ task.task_id }}" class="btn btn-block btn-lg btn-success text-xs-center">
-              <i class="fa fa-clock-o fa-fw"></i>
-              Clock-in
-            </a>
-          </div>
-        </form>
-        <div class="col-xs-8">
-          <ul class="list-group" draggable="true">
-            <li class="list-group-item">
-              {{ task.name }}
-            </li>
-            <li class="list-group-item" id="time{{ task.task_id }}">
-              00:00:00
-            </li>
-            <li class="list-group-item">
-              <b id="tot_H{{ task.task_id }}">{% widthratio task.seconds 3600 1 %}</b> H <b id="tot_M{{ task.task_id }}">{% widthratio task.seconds 60 1 %}</b> M Total
-            </li>
-          </ul>
-        </div>
-        <div class="col-xs-2 getlow text-center">
-          <a href="" class="btn btn-block btn-lg btn-danger text-xs-center">
-            Edit
-          </a>
-        </div>
+{% if task.is_project %}
+<div class="section" style="background-color: #777; border-bottom: solid #000;">
+  <div class="container">
+    <div class="row inline">
+      <div class="col-lg-2 getlow text-center">
+        <button type="button" class="btn {% if mobile %} btn-md {% else %} btn-lg {% endif %} btn-block btn-success" id="clock_butt{{ task.task_id }}" value="Add Task" onclick="clock_in({{ task.task_id }});">
+          <span class="glyphicon glyphicon-time" id="drop{{ task.project_id }}"></span>
+        </button>
       </div>
-      <div class="row">&nbsp</div>
+      <div class="col-lg-8">
+        <ul class="list-inline" draggable="true">
+          <li class="list-inline-item">
+          Project: {{ task.name }}
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
+</div>
+{% else %}
+<div class="section" style="background-color: #{{ task.color }}; border-bottom: solid #000;">
+  <div class="container">
+    <div class="row inline">
+      <form id="form{{ task.task_id }}">
+        <div class="col-lg-2 getlow text-center">
+          <button type="button" class="btn {% if mobile %} btn-md {% else %} btn-lg {% endif %} btn-block btn-success" id="clock_butt{{ task.task_id }}" value="Add Task" onclick="clock_in({{ task.task_id }});">
+          <span class="glyphicon glyphicon-time"></span>
+            Clock-in
+          </button>
+        </div>
+      </form>
+      <div class="col-lg-8">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+            {{ task.name }}
+          </li>
+          <li class="list-inline-item" id="task{{ task.task_id }}time"> Time clocked: {{ task.time_str | safe }} 
+          </li>
+        </ul>
+      </div>
+      <div class="col-lg-2 getlow text-center">
+        <button type="button" class="btn {% if mobile %} btn-md {% else %} btn-lg {% endif %} btn-block btn-danger" value="Edit" onclick="edit_task({{ task.task_id }});">
+          Edit
+        </button>
+      </div>
+    </div>
+    <div class="row">&nbsp</div>
+  </div>
+</div>
+{% endif %}
 {% endfor %}
 {% else %}
-  <div class="section" style="background-color: #777;">
-    <div class="container">
-      <div class="row"></div>
-      <div class="row">
-        <h3>You currently have no tasks.</h3>
-      </div>
+<div class="section" style="background-color: #777;">
+  <div class="container">
+    <div class="row"></div>
+    <div class="row">
+      <h3>You currently have no tasks.</h3>
     </div>
   </div>
+</div>
 {% endif %}
 
-
-
-  <div class="section" id="add_buttons_section">
-    <div class="container">
-
-      <div class="row plusrow">
-        <div class="col-lg-6 col-lg-offset-3 text-xs-center">
-          <button type="button" class="btn {% if mobile %} btn-md {% else %} btn-lg {% endif %} btn-block btn-success" value="Add Task" onclick="show_add_task(-1);">
-            <span class="glyphicon glyphicon-plus"></span> Add Task
-          </button>
-        </div>
+<div class="section" id="add_buttons_section">
+  <div class="container">
+    <div class="row plusrow">
+      <div class="col-lg-6 col-lg-offset-3 text-xs-center">
+        <button type="button" class="btn {% if mobile %} btn-md {% else %} btn-lg {% endif %} btn-block btn-success" value="Add Task" onclick="show_add_task(0);">
+          <span class="glyphicon glyphicon-plus"></span> New Task
+        </button>
       </div>
-
-      <div class="row plusrow">
-        <div class="col-lg-6 col-lg-offset-3 text-xs-center">
-          <button type="button" class="btn {% if mobile %} btn-md {% else %} btn-lg {% endif %} btn-block btn-success" value="Add Project"  onclick="show_add_project();">
-            <span class="glyphicon glyphicon-plus"></span> Add Project
-          </button>
-        </div>
+    </div>
+    <div class="row plusrow">
+      <div class="col-lg-6 col-lg-offset-3 text-xs-center">
+        <button type="button" class="btn {% if mobile %} btn-md {% else %} btn-lg {% endif %} btn-block btn-success" value="Add Project"  onclick="show_add_project();">
+          <span class="glyphicon glyphicon-plus"></span> New Project
+        </button>
       </div>
-
     </div>
   </div>
+</div>
 
 <!-- Add task modal -->
-<div class="section" id="task_modal" {% if not bad_t_form %}style="display:none;"{% endif %}>
+<div class="section" id="task_modal" style="display:none;">
 <div class="container">
 {% if mobile %}
 <div class="container col-md-12">
@@ -90,70 +102,118 @@
 <div class="container col-md-8 col-md-offset-2">
 {% endif %}
 <div class="panel-group">
-<div class="panel panel-default" >
-<div class="panel-body">
-
-  <form id="task_form" class="form-horizontal" action="{% url 'clocks:new_task' %}" method="post" role="form">
-    {% csrf_token %}
-    {% if task_form.non_field_errors %}
-    <div class="form-group">
-      {{ task_form.non_field_errors }}
-    </div>
-    {% endif %}
-    <div class="form-group">
-      <div class="col-xs-12">
-        <h3 style="margin-bottom: 20px;">New Task:</h3>
-      </div>
-      <div class="col-xs-12">
-        <input type="text" class="form-control" name="name" id="id_name" placeholder="Task Name" maxlength="50" autofocus/>
-      </div>
-    </div>
-    {% if task_form.name.errors %}
-    <div class="form-group">
-      {{ task_form.name.errors }}
-    </div>
-    {% endif %}
-
-    <div class="form-group">
-      <div class="col-xs-12">
-        <h5>Select a task color:</h5>
-      </div>
-      <div class="col-xs-12">
-        <div class="col-xs-offset-4">
-          <button type="button" id="tb0" class="btn btn-md btn-color center-block col-xs-1" style="background-color: #333;" onclick="task_color(0);" disabled="disabled">&nbsp</button>
-          <button type="button" id="tb1" class="btn btn-md btn-color center-block col-xs-1" style="background-color: #555;" onclick="task_color(1);">&nbsp</button>
-          <button type="button" id="tb2" class="btn btn-md btn-color center-block col-xs-1" style="background-color: #777;" onclick="task_color(2);">&nbsp</button>
-          <button type="button" id="tb3" class="btn btn-md btn-color center-block col-xs-1" style="background-color: #999;" onclick="task_color(3);">&nbsp</button>
-          <button type="button" id="tb4" class="btn btn-md btn-color center-block col-xs-1" style="background-color: #bbb;" onclick="task_color(4);">&nbsp</button>
+  <div class="panel panel-default" >
+    <div class="panel-body">
+      <form id="task_form" class="form-horizontal" action="{% url 'clocks:new_task' %}" method="post" role="form">
+        {% csrf_token %}
+        <div class="form-group">
+          <div class="col-xs-12">
+            <h3 style="margin-bottom: 20px;">New Task:</h3>
+          </div>
+          <div class="col-xs-12">
+            <input type="text" class="form-control" name="name" id="id_name" placeholder="Task Name" maxlength="50" autofocus/>
+          </div>
         </div>
-      </div>
+        <div class="form-group">
+          <div class="col-xs-12">
+            <h5>Select a task color:</h5>
+          </div>
+          <div class="col-xs-12">
+            <div class="col-xs-offset-2">
+              <button type="button" id="tb0" class="btn btn-md btn-color center-block col-xs-1" style="background-color: #777;" onclick="task_color(0);" disabled="disabled">&nbsp</button>
+              <button type="button" id="tb1" class="btn btn-md btn-color center-block col-xs-1" style="background-color: #888;" onclick="task_color(1);">&nbsp</button>
+              <button type="button" id="tb2" class="btn btn-md btn-color center-block col-xs-1" style="background-color: #999;" onclick="task_color(2);">&nbsp</button>
+              <button type="button" id="tb3" class="btn btn-md btn-color center-block col-xs-1" style="background-color: #BBB;" onclick="task_color(3);">&nbsp</button>
+              <button type="button" id="tb4" class="btn btn-md btn-color center-block col-xs-1" style="background-color: #CCC;" onclick="task_color(4);">&nbsp</button>
+              <button type="button" id="tb5" class="btn btn-md btn-color center-block col-xs-1" style="background-color: #DDD;" onclick="task_color(5);">&nbsp</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+        </div>
+        <div class="form-group" style="display: none;">
+          <input type="text" class="form-control" name="color" id="id_color" maxlength="6" hidden/>
+        </div>
+        <div class="form-group" style="display: none;">
+          <input type="text" class="form-control" name="project_id" id="id_project_id" value="0" hidden/>
+        </div>
+        <div class="form-group">
+          <div class="col-xs-6">
+            <button type="button" class="btn btn-success btn-block" name="name-submit" id="name-submit" value="Create Task" onclick="submit_add_task();">Create Task</button>
+          </div>
+          <div class="col-xs-6">
+            <button type="button" class="btn btn-block btn-danger" name="name-cancel" id="name-cancel" value="Cancel" onclick="hide_add_task();">Cancel</button>
+          </div>
+        </div>
+      </form>
     </div>
+  </div>
+</div>
+</div>
+</div>
+</div>
 
-    <div class="form-group">
+<!-- Add Project modal -->
+<div class="section" id="project_modal" style="display:none;">
+<div class="container">
+{% if mobile %}
+<div class="container col-md-12">
+{% else %}
+<div class="container col-md-8 col-md-offset-2">
+{% endif %}
+<div class="panel-group">
+  <div class="panel panel-default" >
+    <div class="panel-body">
+      <form id="project_form" class="form-horizontal" action="{% url 'clocks:new_project' %}" method="post" role="form">
+        {% csrf_token %}
+        <div class="form-group">
+          <div class="col-xs-12">
+            <h3 style="margin-bottom: 20px;">New Project:</h3>
+          </div>
+          <div class="col-xs-12">
+            <input type="text" class="form-control" name="p_name" id="id_p_name" placeholder="Project Name" maxlength="50" autofocus/>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-xs-12">
+            <h5>Select a project color:</h5>
+          </div>
+          <div class="col-xs-12">
+            <div class="col-xs-offset-2">
+              <button type="button" id="pb0" class="btn btn-md btn-color center-block col-xs-1" style="background-color: #444;" onclick="project_color(0);" disabled="disabled">&nbsp</button>
+              <button type="button" id="pb1" class="btn btn-md btn-color center-block col-xs-1" style="background-color: #555;" onclick="project_color(1);">&nbsp</button>
+              <button type="button" id="pb2" class="btn btn-md btn-color center-block col-xs-1" style="background-color: #666;" onclick="project_color(2);">&nbsp</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+        </div>
+        <div class="form-group" style="display: none;">
+          <input type="text" class="form-control" name="p_color" id="id_p_color" maxlength="6" hidden/>
+        </div>
+        <div class="form-group">
+          <div class="col-xs-6">
+            <button type="button" class="btn btn-success btn-block" name="name-submit" id="p-name-submit" value="Create Project" onclick="submit_add_project();">Create Project</button>
+          </div>
+          <div class="col-xs-6">
+            <button type="button" class="btn btn-block btn-danger" name="name-cancel" id="p-name-cancel" value="Cancel" onclick="hide_add_project();">Cancel</button>
+          </div>
+        </div>
+      </form>
     </div>
-    <div class="form-group" style="display: none;">
-        <input type="text" class="form-control" name="color" id="id_color" maxlength="6" hidden/>
-    </div>
-    <div class="form-group" style="display: none;">
-        <input type="text" class="form-control" name="project" id="id_project" maxlength="50" hidden/>
-    </div>
+  </div>
+</div>
+</div>
+</div>
+</div>
 
-    <div class="form-group">
-      <div class="col-xs-6">
-        <button type="button" class="btn btn-success btn-block" name="name-submit" id="name-submit" value="Create Task" onclick="submit_add_task();">Create Task</button>
-      </div>
-      <div class="col-xs-6">
-        <button type="button" class="btn btn-block btn-danger" name="name-cancel" id="name-cancel" value="Cancel" onclick="hide_add_task();">Cancel</button>
-      </div>
-    </div>
-  </form>
 
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
+<form id="task_id_form" action="{% url 'clocks:clock_in' %}" method="post" role="form" style="display: none;">
+  {% csrf_token %}
+  <div class="form-group">
+    <input type="text" class="form-control" name="task_id" id="id_task_id" hidden/>
+  </div>
+</form>
 
 <div id="placeholders" style="display: none;">
   <ul>
@@ -164,10 +224,8 @@
 {% endblock %}
 
 {% block footer_js %}
-<script type="text/javascript" src="{% static 'js/clocks.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/tasks.js' %}"></script>
 {% endblock %}
-
-
 
 
 

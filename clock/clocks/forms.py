@@ -3,9 +3,12 @@ from django import forms
 class TaskForm(forms.Form):
 	name = forms.CharField()
 	color = forms.CharField()
-	project = forms.CharField()
+	project_id = forms.IntegerField()
 
+class TaskIdForm(forms.Form):
+	task_id = forms.IntegerField()
 
 class ProjectForm(forms.Form):
-	name = forms.CharField()
-	color = forms.CharField(max_length=6)
+	p_name = forms.CharField()
+	p_color = forms.CharField(max_length=6)
+

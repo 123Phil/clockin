@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block content %}
+<div class="section" style="background-color: #555;">
+  <div class="container">
+    <div class="row">
+      <h2>{{ user.username }} clocked in</h2>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="background-color: #{{ task.color }}; border-bottom: solid #000;">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-2 getlow text-center">
+        <button type="button" class="btn {% if mobile %} btn-md {% else %} btn-lg {% endif %} btn-block btn-success" style="height: 82px;" value="Clock-out" onclick="clock_out();">
+          <span class="glyphicon glyphicon-time"></span> Clock-out
+        </button>
+      </div>
+      <div style="display: none;">
+      <form id="clock_form" class="form-horizontal" action="{% url 'clocks:clock_out' %}" method="post" role="form">
+        {% csrf_token %}
+        <input type="text" class="form-control" name="elapsed" id="id_elapsed" value="{{ elapsed }}"/>
+      </form>
+      </div>
+      <div class="col-xs-8">
+        <ul class="list-group list-time">
+          <li class="list-group-item">
+            <div id="task_name">{{ task.name }}</div>
+            <div class="time-str" id="task_clock"><b>00</b> M <b>00</b> S on the clock</div>
+            <div class="time-str" id="task_total"><b>00</b> M <b>00</b> S task total</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block footer_js %}
+<script type="text/javascript" src="{% static 'js/clocked.js' %}"></script>
+<script>
+  init_times({{ elapsed }}, {{ task.seconds }});
+  timer_interval = setInterval("update_timer()", 1000);
+</script>
+
+{% endblock %}
+
+
+
+
+
