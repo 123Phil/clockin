@@ -1,6 +1,6 @@
 
 /* #### Persistent Variables ############################################### */
-var color_str = '777777';
+var color_str = '888888';
 var p_color_str = '444444';
 
 /* #### Clock in ########################################################### */
@@ -11,6 +11,7 @@ function clock_in(task_id) {
 
 /* #### Add Task ########################################################### */
 function show_add_task(project) {
+  color_str='888888';
   document.getElementById("task_modal").style.display="block";
   document.getElementById("add_buttons_section").style.display="none";
   document.getElementById("id_project_id").value=project;
@@ -48,6 +49,7 @@ function delete_task(task_id) {
 
 /* #### Add Project ######################################################## */
 function show_add_project() {
+  p_color_str='444444';
   document.getElementById("project_modal").style.display="block";
   document.getElementById("add_buttons_section").style.display="none";
 }

@@ -43,7 +43,13 @@
 
 <body>
   <nav class="navbar" style="background-color: #333; margin-bottom: 0px;">
-    <a class="navbar-brand" style="margin-left: 20px" href="/">Clock-in</a>
+    <a class="navbar-brand" style="margin-left: 20px" href="/">
+    {% if mobile %}
+    <img src="/static/images/logo.png" alt="Clock-in" width="103" height="35" id="logoimage">
+    {% else %}
+    <img src="/static/images/logo.png" alt="Clock-in" width="148" height="50" id="logoimage">
+    {% endif %}
+    </a>
     <ul class="nav navbar-nav pull-right">
       <li class="nav-item">
 {% block account_mgmt %}
