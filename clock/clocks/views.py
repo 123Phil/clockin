@@ -60,7 +60,7 @@ def get_form(request, FormClass):
 		raise Http404('Invalid request.')
 	f = FormClass(request.POST)
 	if not f.is_valid():
-		raise Http404('Invalid form.' + f.as_p())
+		raise Http404('Invalid form.')
 	return f
 
 def get_new_task_id(username):

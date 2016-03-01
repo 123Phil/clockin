@@ -13,8 +13,8 @@
 <div class="section" style="background-color: #{{ task.color }}; border-bottom: solid #000;">
   <div class="container">
     <div class="row">
-      <div class="col-xs-2 getlow text-center">
-        <button type="button" class="btn {% if mobile %} btn-md {% else %} btn-lg {% endif %} btn-block btn-success" style="height: 82px;" value="Clock-out" onclick="clock_out();">
+      <div class="col-{% if mobile %}xs-3{% else %}sm-3{% endif %} getlow text-center">
+        <button type="button" class="btn {% if mobile %} btn-xs {% else %} btn-lg {% endif %} btn-block btn-success" {% if not mobile %}style="height: 82px;"{% endif %} value="Clock-out" onclick="clock_out();">
           <span class="glyphicon glyphicon-time"></span> Clock-out
         </button>
       </div>
@@ -24,7 +24,7 @@
         <input type="text" class="form-control" name="elapsed" id="id_elapsed" value="{{ elapsed }}"/>
       </form>
       </div>
-      <div class="col-xs-8">
+      <div class="col-{% if mobile %}xs-9{% else %}sm-9{% endif %}">  
         <ul class="list-group list-time">
           <li class="list-group-item">
             <div id="task_name">{{ task.name }}</div>

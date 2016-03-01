@@ -9,21 +9,30 @@ body{margin:0 0 100px; background-color: #777}
 .vertical-align{display:flex;align-items:center}
 #content{margin-top:0;margin-bottom:0;min-height:300px;}
 
-.btn-account{border: 1px solid;border-radius: 12px;padding: 10px 10px 10px 10px !important;margin-top: 5px !important;
+.btn-account{
+  border: 1px solid;
+  border-radius: 8px;
+  padding: 13px 15px 13px 15px !important;
+  margin-top: 10px !important;
+  height: 50px;
   color: #333;
-  background-color: #bbb;
-  border-color: #777;
+  background-color: #f0f1f1;
+  border-color: #fff;
+}
+.navbar-nav {
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 .btn-account:focus,
 .btn-account.focus {
   color: #333;
-  background-color: #ccc !important;
+  background-color: #aaa !important;
   border-color: #aaa;
 }
 .btn-account:hover {
   color: #333;
-  background-color: #ddd !important;
-  border-color: #999;
+  background-color: #ccc !important;
+  border-color: #bbb;
 }
 .btn-account:active,
 .btn-account.active,
@@ -73,6 +82,8 @@ fieldset[disabled] .btn-color {
 
 .my-name {color: #eee;padding-top: 7px !important;padding-bottom: 7px !important;}
 .navbar {border-radius: 0px !important;}
+.navbar-nav {margin-right: 20px;}
+.navbar-brand {height: auto;padding: 10px 10px 10px 10px;}
 
 .list-time {margin-top: 20px;}
 .list-inline {margin-top: 20px;}

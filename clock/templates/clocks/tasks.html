@@ -16,12 +16,12 @@
 <div class="section" style="background-color: #777; border-bottom: solid #000;">
   <div class="container">
     <div class="row inline">
-      <div class="col-sm-2 getlow text-center">
-        <button type="button" class="btn {% if mobile %} btn-md {% else %} btn-lg {% endif %} btn-block btn-warning" id="proj_butt{{ task.project_id }}" value="Add Task" onclick="show_project_tasks({{ task.project_id }});">
+      <div class="col-xs-2 getlow text-center">
+        <button type="button" class="btn {% if mobile %} btn-sm {% else %} btn-lg {% endif %} btn-block btn-warning" id="proj_butt{{ task.project_id }}" value="Add Task" onclick="show_project_tasks({{ task.project_id }});">
           <span class="glyphicon glyphicon-triangle-right" id="drop{{ task.project_id }}"></span>
         </button>
       </div>
-      <div class="col-sm-8">
+      <div class="col-xs-8">
         <ul class="list-inline">
           <li class="list-inline-item">
           Project: {{ task.name }}
@@ -36,14 +36,14 @@
   <div class="container">
     <div class="row inline">
       <form id="form{{ task.task_id }}">
-        <div class="col-sm-2 getlow text-center">
-          <button type="button" class="btn {% if mobile %} btn-md {% else %} btn-lg {% endif %} btn-block btn-success" id="clock_butt{{ task.task_id }}" value="Add Task" onclick="clock_in({{ task.task_id }});">
+        <div class="col-xs-2 getlow text-center">
+          <button type="button" class="btn {% if mobile %} btn-sm {% else %} btn-lg {% endif %} btn-block btn-success" id="clock_butt{{ task.task_id }}" value="Add Task" onclick="clock_in({{ task.task_id }});">
           <span class="glyphicon glyphicon-time"></span>
             Clock-in
           </button>
         </div>
       </form>
-      <div class="col-sm-8">
+      <div class="col-xs-8">
         <ul class="list-inline">
           <li class="list-inline-item">
             {{ task.name }}
@@ -52,8 +52,8 @@
           </li>
         </ul>
       </div>
-      <div class="col-sm-2 getlow text-center">
-        <button type="button" class="btn {% if mobile %} btn-md {% else %} btn-lg {% endif %} btn-block btn-danger" value="Edit" onclick="edit_task({{ task.task_id }});">
+      <div class="col-xs-2 getlow text-center">
+        <button type="button" class="btn {% if mobile %} btn-sm {% else %} btn-lg {% endif %} btn-block btn-danger" value="Edit" onclick="edit_task({{ task.task_id }});">
           Edit
         </button>
       </div>
@@ -78,14 +78,14 @@
   <div class="container">
     <div class="row plusrow">
       <div class="col-sm-6 col-sm-offset-3 text-xs-center">
-        <button type="button" class="btn {% if mobile %} btn-md {% else %} btn-lg {% endif %} btn-block btn-success" value="Add Task" onclick="show_add_task(0);">
+        <button type="button" class="btn {% if mobile %} btn-sm {% else %} btn-lg {% endif %} btn-block btn-success" value="Add Task" onclick="show_add_task(0);">
           <span class="glyphicon glyphicon-plus"></span> New Task
         </button>
       </div>
     </div>
     <div class="row plusrow">
       <div class="col-sm-6 col-sm-offset-3 text-xs-center">
-        <button type="button" class="btn {% if mobile %} btn-md {% else %} btn-lg {% endif %} btn-block btn-success" value="Add Project"  onclick="show_add_project();">
+        <button type="button" class="btn {% if mobile %} btn-sm {% else %} btn-lg {% endif %} btn-block btn-success" value="Add Project"  onclick="show_add_project();">
           <span class="glyphicon glyphicon-plus"></span> New Project
         </button>
       </div>
