@@ -5,7 +5,9 @@
   <div class="section" style="background-color: #555;">
     <div class="container">
       <div class="row">
-        <h2>{{ user.username }}'s tasks:</h2>
+        {% if mobile %}<h5 style="margin-left: 15px;">{% else %}<h3>{% endif %}
+        {{ user.username }}'s tasks:
+        {% if mobile %}</h5>{% else %}</h3>{% endif %}
       </div>
     </div>
   </div>
@@ -13,22 +15,75 @@
 {% if tasks %}
 {% for task in tasks %}
 {% if task.is_project %}
-<div class="section" style="background-color: #777; border-bottom: solid #000;">
+<div class="section" style="background-color: #{{ task.color }}; border-bottom: solid #000;">
   <div class="container">
     <div class="row inline">
       <div class="col-xs-2 getlow text-center">
-        <button type="button" class="btn {% if mobile %} btn-sm {% else %} btn-lg {% endif %} btn-block btn-warning" id="proj_butt{{ task.project_id }}" value="Add Task" onclick="show_project_tasks({{ task.project_id }});">
+        <button type="button" class="btn {% if mobile %} btn-sm {% else %} btn-lg {% endif %} btn-block btn-warning" id="proj_butt{{ task.project_id }}" style="display: block; width: 100%;" onclick="show_project_tasks({{ task.project_id }});">
           <span class="glyphicon glyphicon-triangle-right" id="drop{{ task.project_id }}"></span>
         </button>
       </div>
-      <div class="col-xs-8">
+      <div id="p_label{{ task.project_id }}" style="display: none;">{{ task.name }}</div>
+      <div class="{% if mobile %}col-xs-5{% else %}col-xs-6{% endif %}">
         <ul class="list-inline">
           <li class="list-inline-item">
           Project: {{ task.name }}
           </li>
         </ul>
       </div>
+      <div class="{% if mobile %}col-xs-3{% else %}col-xs-2{% endif %} getlow text-center">
+        <button type="button" class="btn {% if mobile %} btn-sm {% else %} btn-lg {% endif %} btn-block btn-success" value="Add Task" onclick="show_add_task({{ task.project_id }});">
+          <span class="glyphicon glyphicon-plus" id="p_task_add{{ task.project_id }}"></span>
+          Add Task
+        </button>
+      </div>
+      <div class="col-xs-2 getlow text-center">
+        <button type="button" class="btn {% if mobile %} btn-sm {% else %} btn-lg {% endif %} btn-block btn-danger" value="Edit" onclick="edit_task({{ task.task_id }});">
+          Edit
+        </button>
+      </div>
     </div>
+    <div id="p_tasks{{ task.project_id }}" style="display: none;">
+    {% if task.tasks %}
+    {% for p_task in task.tasks %}
+    <div class="row inline" style="background-color: #{{ p_task.color }};">
+      <form id="form{{ p_task.task_id }}">
+        <div class="col-xs-offset-1 {% if mobile %}col-xs-3{% else %}col-xs-2{% endif %} getlow text-center">
+          <button type="button" class="btn {% if mobile %} btn-sm {% else %} btn-lg {% endif %} btn-block btn-success" id="clock_butt{{ p_task.task_id }}" value="Add Task" onclick="clock_in({{ p_task.task_id }});">
+          <span class="glyphicon glyphicon-time"></span>
+            Clock-in
+          </button>
+        </div>
+      </form>
+      <div class="{% if mobile %}col-xs-6{% else %}col-xs-7{% endif %}">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+            {{ p_task.name }}
+          </li>
+          <li class="list-inline-item" id="p_task{{ p_task.task_id }}time"> Time clocked: {{ p_task.time_str | safe }} 
+          </li>
+        </ul>
+      </div>
+      <div class="col-xs-2 getlow text-center">
+        <button type="button" class="btn {% if mobile %} btn-sm {% else %} btn-lg {% endif %} btn-block btn-danger" value="Edit" onclick="edit_task({{ p_task.task_id }});">
+          Edit
+        </button>
+      </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="row inline">
+      <div class="col-xs-offset-1 col-xs-11">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+            No tasks for this project.
+          </li>
+        </ul>
+      </div>
+    </div>
+    {% endif %}
+    </div>
+    <div class="row">&nbsp</div>
   </div>
 </div>
 {% else %}
@@ -36,14 +91,14 @@
   <div class="container">
     <div class="row inline">
       <form id="form{{ task.task_id }}">
-        <div class="col-xs-2 getlow text-center">
+        <div class="{% if mobile %}col-xs-3{% else %}col-xs-2{% endif %} getlow text-center">
           <button type="button" class="btn {% if mobile %} btn-sm {% else %} btn-lg {% endif %} btn-block btn-success" id="clock_butt{{ task.task_id }}" value="Add Task" onclick="clock_in({{ task.task_id }});">
           <span class="glyphicon glyphicon-time"></span>
             Clock-in
           </button>
         </div>
       </form>
-      <div class="col-xs-8">
+      <div class="{% if mobile %}col-xs-7{% else %}col-xs-8{% endif %}">
         <ul class="list-inline">
           <li class="list-inline-item">
             {{ task.name }}
@@ -108,7 +163,7 @@
         {% csrf_token %}
         <div class="form-group">
           <div class="col-xs-12">
-            <h3 style="margin-bottom: 20px;">New Task:</h3>
+            <h3 style="margin-bottom: 20px;" id="new_task_label">New Task:</h3>
           </div>
           <div class="col-xs-12">
             <input type="text" class="form-control" name="name" id="id_name" placeholder="Task Name" maxlength="50" autofocus/>

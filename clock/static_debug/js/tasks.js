@@ -12,6 +12,12 @@ function clock_in(task_id) {
 /* #### Add Task ########################################################### */
 function show_add_task(project) {
   color_str='888888';
+  if (project != 0) {
+    var p_name = document.getElementById("p_label"+project).innerHTML;
+    document.getElementById("new_task_label").innerHTML="New " + p_name + " Task:";
+  } else {
+    document.getElementById("new_task_label").innerHTML="New Task:";
+  }
   document.getElementById("task_modal").style.display="block";
   document.getElementById("add_buttons_section").style.display="none";
   document.getElementById("id_project_id").value=project;
@@ -82,6 +88,18 @@ function edit_project() {
 
 function delete_project() {
   
+}
+
+/* #### Show/Hide Project tasks ############################################ */
+function show_project_tasks(project_id) {
+  var p_tasks = document.getElementById("p_tasks"+project_id);
+  if (p_tasks.style.display == "none") {
+    p_tasks.style.display="block";
+    document.getElementById("drop"+project_id).className="glyphicon glyphicon-triangle-bottom";
+  } else {
+    p_tasks.style.display="none";
+    document.getElementById("drop"+project_id).className="glyphicon glyphicon-triangle-right";
+  }
 }
 
 

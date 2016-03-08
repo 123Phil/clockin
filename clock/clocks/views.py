@@ -44,6 +44,7 @@ def base_view(request):
 		p = model_to_dict(project, fields=project_fields)
 		p_tasks = Task.objects.filter(username=u.username,
 			project=project).order_by('order')
+		task_entries = Task.objects.filter(username=u.username, project=project)
 		p["tasks"] = [model_to_dict(t, fields=task_fields) for t in task_entries]
 		for task in p["tasks"]:
 			task["time_str"] = time_string(task["seconds"])
