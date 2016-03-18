@@ -82,9 +82,9 @@ def get_new_task_order(username, project):
 		return 1
 
 def time_string(seconds):
-	h = seconds // 3600
-	m = seconds // 60 % 60
-	s = seconds % 60
+	h = int(seconds // 3600)
+	m = int(seconds // 60 % 60)
+	s = int(seconds % 60)
 	time_str = "<b>{0:02}</b> M <b>{1:02}</b> S".format(m,s)
 	if h != 0:
 		time_str = "<b>{}</b> H ".format(h) + time_str
