@@ -8,8 +8,8 @@ import json
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-ALLOWED_HOSTS = ['clockin.space', 'www.clockin.space']
+DEBUG = True
+ALLOWED_HOSTS = ['*']
 
 # Non-secret:
 ACCOUNT_ACTIVATION_DAYS = 7
@@ -72,13 +72,8 @@ WSGI_APPLICATION = 'clock.wsgi.application'
 # Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': '',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
-        #'ATOMIC_REQUESTS' : True,
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'clockin',
     }
 }
 
@@ -96,12 +91,6 @@ with open('secrets.json', 'r') as f:
     DEFAULT_FROM_EMAIL = secrets['DEFAULT_FROM_EMAIL']
     SERVER_EMAIL = secrets['DEFAULT_FROM_EMAIL']
     EMAIL_HOST_PASSWORD = secrets['EMAIL_HOST_PASSWORD']
-    d = DATABASES['default']
-    d['NAME'] = secrets['DATABASE_NAME']
-    d['HOST'] = secrets['DATABASE_HOST']
-    d['PORT'] = secrets['DATABASE_PORT']
-    d['USER'] = secrets['DATABASE_USER']
-    d['PASSWORD'] = secrets['DATABASE_PASSWORD']
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'

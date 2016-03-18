@@ -12,3 +12,6 @@ class ProjectForm(forms.Form):
 	p_name = forms.CharField()
 	p_color = forms.CharField(max_length=6)
 
+class OrderForm(forms.Form):
+	order = forms.CharField()
+	
